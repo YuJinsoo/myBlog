@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <h1>블로그 포스트 보여주는 화면입니다</h1>
+    <a href="{% url 'blog:write' %}">글작성하기</a>
+    <hr>
+    {% if posts %}
+        {% for post in posts %}
+            {{ post }}
+            <a href="{% url 'blog:detail' post_id=post.id %}">게시물상세보기</a>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <div>등록된 게시물이 없습니다.</div>
+    {% endif %}
+</body>
+</html>
