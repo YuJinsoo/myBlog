@@ -13,4 +13,6 @@ urlpatterns = [
     path("create/", views.PostWrite.as_view(), name="write"),
     # 게시글 수정
     path("edit/<int:post_id>/", views.PostEdit.as_view(), name="edit"),
+    # 게시글 삭제
+    path("delete/<int:post_id>/", views.PostDelete.as_view(), name="delete"),
 ]

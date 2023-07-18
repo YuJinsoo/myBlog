@@ -68,3 +68,10 @@ class PostEdit(View):
             'post': post
         }
         return render(request, 'blog/post_edit.html', context=context)
+    
+    
+class PostDelete(View):
+    def post(self, request, post_id):
+        post = Post.objects.get(pk=post_id)
+        post.delete()
+        return redirect('blog:list')
