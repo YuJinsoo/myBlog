@@ -11,6 +11,10 @@
     <a href="{% url 'blog:write' %}">글작성하기</a>
     <br>
     <hr>
+    {% if searchtag %}
+        <p>"{{searchtag}}" 의 검색결과</p>
+    {% endif %}
+    <hr>
     {% if posts %}
         {% for post in posts %}
             {{ post }}

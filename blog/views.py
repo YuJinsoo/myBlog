@@ -80,6 +80,7 @@ class PostDelete(View):
         return redirect('blog:list')
     
 
+# search url 규칙을 맞추기 위해 요청만 보냄.
 class PostSearchQuery(View):
     def get(self, request):
         print(request)
@@ -96,13 +97,18 @@ class PostSearch(View):
     def get(self, request, cat):
         ## 단일 카테고리에 일치하는 것만 검색
         # TODO 추후 여러개, 제목/내용/작성자 에 대한 검색, 대소문자 고려해보기
-        category = Category.objects.filter(name=cat)
-        if len(category) > 0:
-            posts =  Post.objects.filter(category=category[0])
+        if cat == 'etc':
+            posts =  Post.objects.filter(category=None)
         else:
-            posts = None
+            category = Category.objects.filter(name=cat)
+            
+            if len(category) > 0:
+                posts =  Post.objects.filter(category=category[0])
+            else:
+                posts = None
 
         context = {
-            'posts' : posts
+            'posts' : posts,
+            'searchtag': cat,
         }
         return render(request, 'blog/post_list.html', context=context)
