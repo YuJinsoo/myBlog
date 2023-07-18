@@ -1,14 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from .models import Post, Comment
+from django.db.models import Q
+from .models import Post, Comment, Category
 from .forms import PostForm
 
 
 class PostList(View):
     def get(self, request):
         posts = Post.objects.all()
+        category = Category.objects.all()
         context = {
             "posts": posts,
+            "category": category
         }
         return render(request, "blog/post_list.html", context=context)
 
@@ -75,3 +78,31 @@ class PostDelete(View):
         post = Post.objects.get(pk=post_id)
         post.delete()
         return redirect('blog:list')
+    
+
+class PostSearchQuery(View):
+    def get(self, request):
+        print(request)
+        print(request.GET)
+        cat = request.GET.get('cat')
+        if cat == '':
+            cat = 'All'
+            return redirect('blog:list')
+        print(cat)
+        return redirect('blog:search', cat=cat)
+    
+    
+class PostSearch(View):
+    def get(self, request, cat):
+        ## 단일 카테고리에 일치하는 것만 검색
+        # TODO 추후 여러개, 제목/내용/작성자 에 대한 검색, 대소문자 고려해보기
+        category = Category.objects.filter(name=cat)
+        if len(category) > 0:
+            posts =  Post.objects.filter(category=category[0])
+        else:
+            posts = None
+
+        context = {
+            'posts' : posts
+        }
+        return render(request, 'blog/post_list.html', context=context)

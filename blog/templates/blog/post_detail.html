@@ -15,11 +15,19 @@
         {% csrf_token %}
         <input type="submit" value="게시글삭제">
     </form>
+    {{ request.path }}
     <hr>
     {{ post.title }}
+    <br>
     {{ post.content }}
+    <br>
     {{ post.writer }}
+    <br>
+    {{ post.category }}
+    <br>
     {{ post.created_at }}
+    <br>
     {{ post.updated_at }}
+    <br>
 </body>
 </html>
