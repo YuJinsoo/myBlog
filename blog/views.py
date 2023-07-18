@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from django.db.models import Q
+# from django.db.models import Q
 from .models import Post, Comment, Category
 from .forms import PostForm
 
@@ -43,6 +43,7 @@ class PostWrite(View):
         
         # form.add_error(None, '폼이 유효하지 않습니다.') # 에러 전달도 해줘야함
         return redirect('blog:write')
+
 
 class PostEdit(View):
     def get(self, request, post_id):

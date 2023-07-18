@@ -1,10 +1,13 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
+## auth를 확장된 모델을 가져오게 됩니다.
+User = get_user_model()
 
 class Post(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField()
-    author = models.CharField(max_length=30)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey("Category", null=True, blank=True, on_delete=models.SET_NULL)
@@ -16,7 +19,7 @@ class Post(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey("Post", on_delete=models.CASCADE)
     content = models.TextField(max_length=500)
-    writer = models.CharField(max_length=30)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     
 
