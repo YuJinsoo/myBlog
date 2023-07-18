@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글수정</title>
+</head>
+<body>
+    <h1>게시글 수정합니다</h1>
+    <form action="{% url 'blog:edit' post_id=post.pk %}" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        {%comment%}
+        <div>
+            {{ form.title.label }}
+            {{ form.title }}
+        </div>
+        <div>
+            {{ form.content.label }}
+            {{ form.content }}
+        </div>
+        <div>
+            {{ form.category.label }}
+            {{ form.category }}
+        </div>
+        {%endcomment%}
+        <input type="submit">
+    </form>
+</body>
+</html>

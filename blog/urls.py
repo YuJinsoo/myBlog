@@ -11,4 +11,6 @@ urlpatterns = [
     path("<int:post_id>/", views.PostDetail.as_view(), name="detail"),
     # 게시글 작성
     path("create/", views.PostWrite.as_view(), name="write"),
+    # 게시글 수정
+    path("edit/<int:post_id>/", views.PostEdit.as_view(), name="edit"),
 ]

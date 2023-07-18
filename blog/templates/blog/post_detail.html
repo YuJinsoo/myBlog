@@ -8,6 +8,9 @@
 </head>
 <body>
     <h1>게시물 상세페이지 입니다.</h1>
+    <hr>
+    <a href="{% url 'blog:edit' post_id=post.pk %}">게시글수정</a>
+    <hr>
     {{ post.title }}
     {{ post.content }}
     {{ post.writer }}
