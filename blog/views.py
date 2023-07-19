@@ -6,8 +6,8 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import date, datetime, timedelta
 
-from .models import Post, Comment, Category
-from .forms import PostForm, CommentForm
+from .models import Post, Comment, Category, ReComment
+from .forms import PostForm, CommentForm, ReCommentForm
 
 
 
@@ -28,10 +28,12 @@ class PostDetail(View):
         post = get_object_or_404(Post, pk= post_id)
         comments = Comment.objects.filter(post=post).order_by("-created_at")
         comment_form = CommentForm()
+        recomment_form = ReCommentForm()
         context = {
             "post": post,
             "comments": comments,
-            "comment_form": comment_form
+            "comment_form": comment_form,
+            "recomment_form": recomment_form
         }
         
         #
@@ -52,6 +54,7 @@ class PostDetail(View):
         if f'_{post_id}_' not in cookie_value:
             cookie_value += f'{post_id}_'
             # python에서 쿠키생성 set_cookie(쿠키이름, 값, 만료기간, js접근불가능)
+            # 쿠키가 없으면 생성, 있으면 추가하는 메서드
             response.set_cookie('hitpost', value=cookie_value, max_age=max_age, httponly=True)
             post.hits +=1
             post.save()
@@ -94,7 +97,7 @@ class PostEdit(LoginRequiredMixin, View):
         
         if post.author == request.user or request.user.is_superuser:
             form = PostForm(request.POST)
-            print(form.is_valid())
+            # print(form.is_valid())
             if form.is_valid():
                 post.title = form.cleaned_data["title"]
                 post.content = form.cleaned_data["content"]
@@ -182,6 +185,28 @@ class CommentDelete(LoginRequiredMixin, View):
         postid = comment.post.id
         comment.delete()
         return redirect('blog:detail', post_id=postid)
+
+
+### 대댓글
+class ReCommentWrite(LoginRequiredMixin, View):
+    def post(self, request, post_id, cm_id):
+        comment = get_object_or_404(Comment, pk=cm_id)
+        form = ReCommentForm(request.POST)
+        author = request.user
+        
+        if form.is_valid():
+            content = form.cleaned_data["content"]
+            recm = ReComment.objects.create(comment=comment, author=author, content=content)
+            
+        return redirect('blog:detail', post_id=post_id)
+
+
+class ReCommentDelete(LoginRequiredMixin, View):
+    def post(self, request, post_id, rcm_id):
+        rcm = get_object_or_404(ReComment, pk=rcm_id)
+        rcm.delete()
+        return redirect('blog:detail', post_id=post_id)
+
 
 # 404 error handler
 def page_not_found(request, exception):

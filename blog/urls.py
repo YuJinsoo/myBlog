@@ -23,7 +23,10 @@ urlpatterns = [
     path("detail/<int:post_id>/comment/write/", views.CommentWrite.as_view(), name="cm-write"),
     # 코멘트 삭제
     path("detail/comment/<int:cm_id>/delete/", views.CommentDelete.as_view(), name="cm-delete"),
-    
+    ## 대댓글 작성
+    path("detail/<int:post_id>/comment/<int:cm_id>/replywrite/", views.ReCommentWrite.as_view(), name="rcm-write"),
+    ## 대댓글 삭제
+    path("detail/<int:post_id>/comment/replydelete/<int:rcm_id>/", views.ReCommentDelete.as_view(), name="rcm-delete"),
     
 ]
 

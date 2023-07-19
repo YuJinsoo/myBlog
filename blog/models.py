@@ -21,8 +21,15 @@ class Comment(models.Model):
     post = models.ForeignKey("Post", on_delete=models.CASCADE)
     content = models.TextField(max_length=500)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
+    created_at = models.DateTimeField(auto_now_add=True)    
+
+
+class ReComment(models.Model):
+    comment = models.ForeignKey("Comment", on_delete=models.CASCADE)
+    content = models.TextField(max_length=500)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)    
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)

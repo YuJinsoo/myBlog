@@ -28,22 +28,107 @@
         <br>
         {{ post.hits }}
         <hr>
-        <h3>댓글</h3>
-        <form action="{% url 'blog:cm-write' post_id=post.pk %}" method="post">
-            {% csrf_token %}
-            {{ comment_form.as_p }}
-            <input type="submit" class="btn btn-secondary" value="댓글작성">
-        </form>
-        <hr>
-        {% for comment in comments %}
-            {{comment.author}}
-            {{comment.content}}
-            {{comment.created_at}}
-            <form action="{% url 'blog:cm-delete' cm_id=comment.id %}" method="post">
+        <section id="commentSection">
+            <h3>댓글</h3>
+            <form action="{% url 'blog:cm-write' post_id=post.pk %}" method="post">
                 {% csrf_token %}
-                <input type="submit" class="btn btn-outline-danger" value="X">
+                {{ comment_form.as_p }}
+                <input type="submit" class="btn btn-secondary" value="댓글작성">
             </form>
-        {% endfor %}
+            <hr>
+            <ul class="list-group list-group-flush">
+            {% for comment in comments %}
+                <li class="list-group-item" id="comment_{{forloop.counter}}">
+                    <div class="row">
+                        <div class="col-8">
+                            {{comment.author}}
+                            {{comment.content}}
+                            {{comment.created_at}}
+                        </div>
+                        <div class="col-4">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                {% if user == comment.author or user.is_superuser %}
+                                <form action="{% url 'blog:cm-delete' cm_id=comment.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="submit" class="btn btn-outline-danger" value="X">
+                                </form>
+                                {% endif %}
+                                {% if user.is_authenticated %}
+                                <button class="btn btn-outline-secondary recm">대댓글</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% with recomments=comment.recomment_set.all %}
+                    {% for recomment in recomments %}
+                    <div class="row">
+                        <div class="col-1">re:</div>
+                        <div class="col-7">
+                            {{ recomment.author }} : 
+                            {{ recomment.content }}
+                            {{ recomment.created_at }}
+                        </div>
+                        <div class="col-4">
+                            {% if user == recomment.author or user.is_superuser %}
+                            <form action="{% url 'blog:rcm-delete' post_id=post.pk rcm_id=recomment.pk %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" class="btn btn-outline-danger" value="X">
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endwith%}
+                    <div class="row hidden">
+                        <form action="{% url 'blog:rcm-write' post_id=post.pk cm_id=comment.pk %}" method="post">
+                        
+                            {% csrf_token %}
+                            {{ recomment_form.as_p }}
+                            <input type="submit" class="btn btn-outline-danger" value="작성!">
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        </section>
     </main>
+    
+    <script>
+        const recm_btn_list = document.querySelectorAll(".recm");
+        for(btn of recm_btn_list){
+            btn.addEventListener("click", (e)=>{
+                const $comment = e.target.parentNode.parentNode.parentNode.parentNode;
 
-{% endblock %}
+                let tmp = $comment.childNodes 
+                let a = tmp[tmp.length-2]
+                a.classList.toggle("hidden");
+            })
+        };
+    
+    </script>
+
+    {% comment %}
+    <script>
+        const recm_btn_list2 = document.querySelectorAll(".recm");
+        for(btn of recm_btn_list){
+            btn.addEventListener("click", (e)=>{
+                let textHTML = `<form action="{% url 'blog:rcm-write' post_id=post.pk cm_id=comment.pk %}" method="post">
+                    
+                    {% csrf_token %}
+                    {{ recomment_form.as_p }}
+                    <input type="submit" class="btn btn-outline-danger" value="작성!">
+                </form>`;
+                const $comment = e.target.parentNode.parentNode.parentNode.parentNode;
+                console.log($comment);
+
+                let tempnode = document.createElement('div');
+                tempnode.classList.add("row");
+                tempnode.innerHTML=textHTML;
+                $comment.append(tempnode);
+            })
+        };
+    
+    </script>
+    {% endcomment %}
+
+    {% endblock %}
