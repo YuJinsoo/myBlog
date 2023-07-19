@@ -11,6 +11,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey("Category", null=True, blank=True, on_delete=models.SET_NULL)
+    hits = models.PositiveIntegerField(default=0, verbose_name='조회수')
 
     def __str__(self):
         return f"[{self.pk}] {self.title} :: {self.author} - {self.created_at}"

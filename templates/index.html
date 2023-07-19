@@ -2,15 +2,17 @@
 
 {% block content %}
     <main class="container">
-        <div class="row align-items-center">
-            <div class="col-6 align-self-center">
-                <h1>hello my blog</h1>
+        <div class="row justify-content-center py-5">
+            <div class="col-8 text-center">
+                <h1>블로그에 온 것을 환영합니다!</h1>
                 
             </div>
         </div>
-        <div class="row align-items-center">
-            <div class="col-3 align-self-center">
-                <a href="{% url 'blog:list' %}" class="btn btn-primary">게시판2</a>
+        <div class="row justify-content-center">
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <a href="{% url 'blog:list' %}" class="btn btn-success">게시판 보기</a>
+                <a href="{% url 'user:login' %}" class="btn btn-success">로그인</a>
+                <a href="{% url 'user:register' %}" class="btn btn-success">회원가입</a>
             </div>
         </div>
     </main>

@@ -1,33 +1,49 @@
-<!DOCTYPE html>
-<html lang="ko-KR">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시물상세페이지?</title>
-</head>
-<body>
-    <h1>게시물 상세페이지 입니다.</h1>
-    <hr>
-    <a href="{% url 'blog:edit' post_id=post.pk %}">게시글수정</a>
-    <hr>
-    <form action="{% url 'blog:delete' post_id=post.pk%}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="게시글삭제">
-    </form>
-    {{ request.path }}
-    <hr>
-    {{ post.title }}
-    <br>
-    {{ post.content }}
-    <br>
-    {{ post.writer }}
-    <br>
-    {{ post.category }}
-    <br>
-    {{ post.created_at }}
-    <br>
-    {{ post.updated_at }}
-    <br>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+    <main class="container">
+        <h2>게시물 상세페이지</h2>
+        {% if user == post.author or user.is_superuser %}
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{% url 'blog:edit' post_id=post.pk %}" class="btn btn-warning">게시글수정</a>
+            <form action="{% url 'blog:delete' post_id=post.pk%}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="게시글삭제" class="btn btn-warning">
+            </form>
+        </div>
+        {% endif %}
+        <!-- {{ request.path }} -->
+        <hr>
+        {{ post.title }}
+        <br>
+        {{ post.author }}
+        <br>
+        {{ post.content }}
+        <br>
+        {{ post.category }}
+        <br>
+        {{ post.created_at }}
+        <br>
+        {{ post.updated_at }}
+        <br>
+        {{ post.hits }}
+        <hr>
+        <h3>댓글</h3>
+        <form action="{% url 'blog:cm-write' post_id=post.pk %}" method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <input type="submit" class="btn btn-secondary" value="댓글작성">
+        </form>
+        <hr>
+        {% for comment in comments %}
+            {{comment.author}}
+            {{comment.content}}
+            {{comment.created_at}}
+            <form action="{% url 'blog:cm-delete' cm_id=comment.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-outline-danger" value="X">
+            </form>
+        {% endfor %}
+    </main>
+
+{% endblock %}

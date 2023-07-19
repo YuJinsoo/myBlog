@@ -15,6 +15,7 @@
         {% if posts %}
             {% for post in posts %}
                 {{ post }}
+                {{ post.hits }}
                 <a href="{% url 'blog:detail' post_id=post.id %}">게시물상세보기</a>
                 <hr>
             {% endfor %}
