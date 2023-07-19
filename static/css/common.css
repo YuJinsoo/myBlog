@@ -33,11 +33,11 @@ body {
 	flex-direction: column;
 	min-height: 100vh;
 }
-.main {
+/* .main {
 	flex-grow: 1;
 	width: 1000px;
 	margin: auto;
-}
+} */
 
 /* header */
 .header {
@@ -48,13 +48,14 @@ body {
 	height: 80px;
 	border-bottom: 1px solid #ddd;
 }
-.header h1 a {
+.header h2 a {
 	color: black;
 }
 
 .header-click {
     display: flex;
     flex-direction: row;
+	align-items: center;
 }
 
 .header-click a,
@@ -69,6 +70,11 @@ body {
 	border: 0;
 	background: none;
 }
+.header-click p {
+	padding: 10px 15px;
+	margin-left: 10px;
+}
+
 
 /* footer */
 .footer {
@@ -79,7 +85,7 @@ body {
 }
 
 /* input --------------------------------- */
-[type="text"],
+/* [type="text"],
 [type="password"],
 [type="email"] {
 	width: 290px;
@@ -90,7 +96,7 @@ body {
 }
 [type="text"]:read-only {
 	background-color: #ccc;
-}
+} */
 
 /* main 내부 컨텐츠 --------------------------------- */
 .main-title {
@@ -104,7 +110,7 @@ body {
 }
 
 /* 버튼 */
-.btn-group {
+/* .btn-group {
 	margin-top: 20px;
 	text-align: right;
 }
@@ -119,7 +125,7 @@ body {
 	justify-content: center;
 	box-sizing: border-box;
 	font: inherit;
-}
+} */
 
 /* 텍스트 숨김처리를 위한 CSS */
 .a11y-hidden {

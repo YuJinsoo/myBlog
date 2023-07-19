@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="ko-KR">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
     <h1>블로그 포스트 보여주는 화면입니다</h1>
-    <a href="{% url 'blog:write' %}">글작성하기</a>
+    <a href="{% url 'blog:write' %}" class="btn btn-primary">글작성하기</a>
     <br>
     <hr>
     {% if searchtag %}
@@ -31,8 +25,4 @@
         <input type="submit" value="검색">
     </form>
 
-</body>
-<script>
-
-</script>
-</html>
+{% endblock %}

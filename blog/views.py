@@ -1,6 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 # from django.db.models import Q
+
+# auth의 mixin 기능
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .models import Post, Comment, Category
 from .forms import PostForm
 
@@ -25,7 +29,7 @@ class PostDetail(View):
         return render(request, "blog/post_detail.html", context=context)
 
 
-class PostWrite(View):
+class PostWrite(LoginRequiredMixin, View):
     def get(self, request):
         form = PostForm()
         context = {
@@ -37,7 +41,7 @@ class PostWrite(View):
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            # post.author = request.user # TODO 글 저자를 로그인한 유저로 변경해야 함.
+            post.author = request.user
             post.save()
             return redirect('blog:list')
         
