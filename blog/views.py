@@ -11,7 +11,7 @@ from .forms import PostForm
 
 class PostList(View):
     def get(self, request):
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by('-created_at')
         category = Category.objects.all()
         context = {
             "posts": posts,
@@ -103,12 +103,12 @@ class PostSearch(View):
         ## 단일 카테고리에 일치하는 것만 검색
         # TODO 추후 여러개, 제목/내용/작성자 에 대한 검색, 대소문자 고려해보기
         if cat == 'etc':
-            posts =  Post.objects.filter(category=None)
+            posts =  Post.objects.filter(category=None).order_by('-created_at')
         else:
             category = Category.objects.filter(name=cat)
             
             if len(category) > 0:
-                posts =  Post.objects.filter(category=category[0])
+                posts =  Post.objects.filter(category=category[0]).order_by('-created_at')
             else:
                 posts = None
 

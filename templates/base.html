@@ -17,10 +17,12 @@
         {% if user.is_authenticated %}
         <div class="header-click">
             <p>반갑습니다, {{ user.username }} 님!</p>
+            <a href="{% url 'blog:list' %}">게시판</a>
             <a href="{% url 'user:logout' %}" type="button">로그아웃</a>
         </div>
         {% else %}
         <div class="header-click">
+            <a href="{% url 'blog:list' %}">게시판</a>
             <a href="{% url 'user:login' %}">로그인</a>
             <a href="{% url 'user:register' %}">회원가입</a>
         </div>
