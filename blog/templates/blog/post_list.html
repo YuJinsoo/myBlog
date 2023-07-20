@@ -18,6 +18,7 @@
                 <th>제목</th>
                 <th>카테고리</th>
                 <th>작성일</th>
+                <th>조회수</th>
             </thead>
             <tbody>
                 {% for post in posts %}
@@ -27,6 +28,7 @@
                     <td><a href="{% url 'blog:detail' post_id=post.id %}" class="">{{post.title}}</a></td>
                     <td>{{post.category.name}}</td>
                     <td>{{post.created_at}}</td>
+                    <td>{{post.hits}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

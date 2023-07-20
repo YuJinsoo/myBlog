@@ -72,8 +72,9 @@ class PostWrite(LoginRequiredMixin, View):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
-            print(request.FILES['image'])
-            post.image = request.FILES['image']
+            if request.FILES:
+                print(request.FILES['image'])
+                post.image = request.FILES['image']
             post.save()
             return redirect('blog:list')
         
@@ -84,7 +85,8 @@ class PostWrite(LoginRequiredMixin, View):
 class PostEdit(LoginRequiredMixin, View):
     def get(self, request, post_id):
         post = get_object_or_404(Post, pk=post_id)
-        form = PostForm(initial={'title':post.title, 'content':post.content, 'category': post.category, 'author': post.author, 'imgae': post.image})
+        print(post.image)
+        form = PostForm(initial={'title':post.title, 'content':post.content, 'category': post.category, 'author': post.author, 'image': post.image })
         
         context = {
             'post': post,
@@ -96,13 +98,17 @@ class PostEdit(LoginRequiredMixin, View):
         post =Post.objects.get(pk=post_id)
         
         if post.author == request.user or request.user.is_superuser:
-            form = PostForm(request.POST)
+            form = PostForm(request.POST, request.FILES)
             # print(form.is_valid())
             if form.is_valid():
                 post.title = form.cleaned_data["title"]
                 post.content = form.cleaned_data["content"]
                 post.category = form.cleaned_data["category"]
-                post.image = request.FILES['image']
+                
+                if request.FILES :
+                    post.image = request.FILES['image']
+                else:
+                    post.image = form.cleaned_data["image"]
                 
                 post.save()
                 return redirect('blog:detail', post_id=post_id)
