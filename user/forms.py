@@ -7,7 +7,12 @@ User = get_user_model()
 
 
 class RegisterForm(UserCreationForm):
-    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        fields = ['username', 'email', 'password1', 'password2']
+        for f in fields:
+            self.fields[f].widget.attrs.update({'class':'form-control'})
+            
     class Meta():
         model = User
         fields = ['username', 'email']
