@@ -16,24 +16,23 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <h2><a href="/">My Blog</a></h2>
-        {% if user.is_authenticated %}
-        <div class="header-click">
-            <p>반갑습니다, {{ user.username }} 님!</p>
-            <a href="{% url 'blog:list' %}">게시판</a>
-            <a href="{% url 'user:logout' %}" type="button">로그아웃</a>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="row my-3 justify-content-center">
+            <div class="col-md-10 col-lg-11" id="main-area">
+                <!--                post detail 과 list가 메인영역 제외하고
+                동일한 디자인으로 할 것이므로 메인영역만 빼고 base.html로 모듈화 한 것-->
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
-        {% else %}
-        <div class="header-click">
-            <a href="{% url 'blog:list' %}">게시판</a>
-            <a href="{% url 'user:login' %}">로그인</a>
-            <a href="{% url 'user:register' %}">회원가입</a>
-        </div>
-        {% endif %}
-      </div>
-    {% block content %}
-    {% endblock %}
+    
+    </div>
+
+
+    
+
+    {% include 'footer.html' %}
 
     {% block script %}
     {% endblock %}
