@@ -14,6 +14,9 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows':'3', 'cols':'50'})
+        }
 
 
 class ReCommentForm(forms.ModelForm):
@@ -21,3 +24,6 @@ class ReCommentForm(forms.ModelForm):
     class Meta:
         model = ReComment
         fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows':'3', 'cols':'40'})
+        }

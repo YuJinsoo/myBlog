@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="ko-KR">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글수정</title>
-</head>
-<body>
-    <h1>게시글 수정합니다</h1>
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1> 게시글 작성 </h1>
     <form action="{% url 'blog:edit' post_id=post.pk %}" method="post">
         {% csrf_token %}
         {{form.as_p}}
@@ -25,7 +19,7 @@
             {{ form.category }}
         </div>
         {%endcomment%}
-        <input type="submit">
+        <input type="submit" class="btn btn-success">
     </form>
-</body>
-</html>
+
+{% endblock %}

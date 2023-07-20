@@ -2,38 +2,63 @@
 
 {% block content %}
     <main class="container">
-        <h2>게시물 상세페이지</h2>
+        <h2>{{ post.title }} </h2> 
+        <p class="badge rounded-pill text-bg-primary">{% if post.category == None %}Uncategorized {% else %}{{ post.category }}{%endif%}</p>
         {% if user == post.author or user.is_superuser %}
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <a href="{% url 'blog:edit' post_id=post.pk %}" class="btn btn-warning">게시글수정</a>
+        <div class="d-grid gap-2 d-flex justify-content-end">
+            <a href="{% url 'blog:edit' post_id=post.pk %}" class="btn btn-warning">글수정</a>
             <form action="{% url 'blog:delete' post_id=post.pk%}" method="post">
                 {% csrf_token %}
-                <input type="submit" value="게시글삭제" class="btn btn-warning">
+                <input type="submit" value="글삭제" class="btn btn-warning">
             </form>
         </div>
         {% endif %}
-        <!-- {{ request.path }} -->
+        
         <hr>
-        {{ post.title }}
+        <div class="card" style="width: 100%;">
+            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row text-center">
+                            <div class="col-2">작성자</div>
+                            <div class="col-4">{{post.author}}</div>
+                            <div class="col-2">조회수</div>
+                            <div class="col-4">{{post.hits}}</div>
+                        </div> 
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row text-center">
+                            <div class="col-6">작성일</div>
+                            <div class="col-6">{{post.created_at}}</div>
+                        </div> 
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row text-center">
+                            <div class="col-6">최종수정일</div>
+                            <div class="col-6">{{post.updated_at}}</div>
+                        </div> 
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row text-center">
+                            <div class="col-12">내용</div>
+                        </div> 
+                    </li>
+                </ul>
+                <p class="card-text">{{post.content}}</p>
+            </div>
+          </div>
         <br>
-        {{ post.author }}
-        <br>
-        {{ post.content }}
-        <br>
-        {{ post.category }}
-        <br>
-        {{ post.created_at }}
-        <br>
-        {{ post.updated_at }}
-        <br>
-        {{ post.hits }}
-        <hr>
         <section id="commentSection">
             <h3>댓글</h3>
             <form action="{% url 'blog:cm-write' post_id=post.pk %}" method="post">
                 {% csrf_token %}
-                {{ comment_form.as_p }}
-                <input type="submit" class="btn btn-secondary" value="댓글작성">
+                <div class="row">
+                    <div class="col-9">{{ comment_form.content }}</div>
+                    <div class="col-3">
+                        <input type="submit" class="btn btn-secondary" value="댓글작성">
+                    </div>
+            </div>
             </form>
             <hr>
             <ul class="list-group list-group-flush">
