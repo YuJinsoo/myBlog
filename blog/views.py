@@ -36,13 +36,10 @@ class PostDetail(View):
             "recomment_form": recomment_form
         }
         
-        #
-        #if post.author == request.user or request.user.is_superuser:
-        #    pass
         # HttpResponse 생성
         response = render(request, "blog/post_detail.html", context=context)
         
-        
+        # 쿠키 만료기간 설정을 위한 셋
         expire_date, now = datetime.now(), datetime.now()
         expire_date += timedelta(hours=1)
         expire_date -= now
@@ -75,7 +72,8 @@ class PostWrite(LoginRequiredMixin, View):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
-            
+            print(request.FILES['image'])
+            post.image = request.FILES['image']
             post.save()
             return redirect('blog:list')
         

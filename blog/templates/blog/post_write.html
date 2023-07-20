@@ -4,8 +4,7 @@
 
     <main class="container">
         <h1 class="my-3"> 게시글 작성 </h1>
-    
-        <form action="{% url 'blog:write' %}" method="post">
+        <form action="{% url 'blog:write' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row py-2 my-2 border-top border-2">
                 <div class="col-2 text-center">제목</div>

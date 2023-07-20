@@ -3,7 +3,7 @@
 {% block content %}
     <main class="container">
         <h2>{{ post.title }} </h2> 
-        <p class="badge rounded-pill text-bg-primary">{% if post.category == None %}Uncategorized {% else %}{{ post.category }}{%endif%}</p>
+        <p class="badge rounded-pill text-bg-primary">{% if post.category == None %} Uncategorized {% else %}{{ post.category }}{%endif%}</p>
         {% if user == post.author or user.is_superuser %}
         <div class="d-grid gap-2 d-flex justify-content-end">
             <a href="{% url 'blog:edit' post_id=post.pk %}" class="btn btn-warning">글수정</a>
