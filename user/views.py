@@ -50,7 +50,6 @@ class Login(View):
             return redirect('blog:list')
         
         form = LoginForm(request, request.POST)
-        print(form)
         if form.is_valid():
             username = form.cleaned_data['username']
             passsword = form.cleaned_data['password']

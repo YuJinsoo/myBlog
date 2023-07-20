@@ -2,12 +2,32 @@
 
 {% block content %}
 
-    <h1> 게시글 작성 </h1>
-
-    <form action="{% url 'blog:write' %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit">
-    </form>
+    <main class="container">
+        <h1 class="my-3"> 게시글 작성 </h1>
+    
+        <form action="{% url 'blog:write' %}" method="post">
+            {% csrf_token %}
+            <div class="row py-2 my-2 border-top border-2">
+                <div class="col-2 text-center">제목</div>
+                <div class="col-10">{{form.title}}</div>
+            </div>
+            <div class="row py-2 my-2 border-bottom border-top">
+                <div class="col-2 text-center">카테고리</div>
+                <div class="col-10">{{form.category}}</div>
+            </div>
+            <div class="row py-2 my-2 border-bottom">
+                <div class="col-2 text-center">내용</div>
+                <div class="col-10 text-center">{{form.content}}</div>
+            </div>
+            <div class="row py-2 my-2 border-bottom border-2">
+                <div class="col-2 text-center">이미지</div>
+                <div class="col-10">{{form.image}}</div>
+            </div>
+            <div class="d-grid gap-2 col-6 mx-auto mt-3">
+                <input type="submit" class="btn btn-success mx-auto" value="작성완료">
+            </div>
+            
+        </form>
+    </main>
    
 {% endblock %}
