@@ -7,18 +7,30 @@
         <a href="{% url 'blog:write' %}" class="btn btn-primary">글작성하기</a>
         {% endif %}
         <br>
-        <hr>
         {% if searchtag %}
             <p>"{{searchtag}}" 의 검색결과</p>
         {% endif %}
-        <hr>
         {% if posts %}
-            {% for post in posts %}
-                {{ post }}
-                {{ post.hits }}
-                <a href="{% url 'blog:detail' post_id=post.id %}">게시물상세보기</a>
-                <hr>
-            {% endfor %}
+        <table class="table">
+            <thead class="table-light">
+                <th>글인덱스</th>
+                <th>작성자</th>
+                <th>제목</th>
+                <th>카테고리</th>
+                <th>작성일</th>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>{{post.pk}}</td>
+                    <td>{{post.author}}</td>
+                    <td><a href="{% url 'blog:detail' post_id=post.id %}" class="">{{post.title}}</a></td>
+                    <td>{{post.category.name}}</td>
+                    <td>{{post.created_at}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
         {% else %}
             <div>등록된 게시물이 없습니다.</div>
         {% endif %}
