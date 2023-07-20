@@ -2,9 +2,11 @@
 
 {% block content %}
     <h1> 게시글 작성 </h1>
-    <form action="{% url 'blog:edit' post_id=post.pk %}" method="post">
+    <form action="{% url 'blog:edit' post_id=post.pk %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{form.as_p}}
+
+
         {%comment%}
         <div>
             {{ form.title.label }}

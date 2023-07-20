@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path
+
+
 from . import views
 
 app_name = "blog"
@@ -29,4 +31,5 @@ urlpatterns = [
     path("detail/<int:post_id>/comment/replydelete/<int:rcm_id>/", views.ReCommentDelete.as_view(), name="rcm-delete"),
     
 ]
+
 

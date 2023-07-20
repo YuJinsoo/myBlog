@@ -19,33 +19,36 @@
             <!-- <img src="..." class="card-img-top" alt="..."> -->
             <div class="card-body">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
+                    <li class="list-group-item bg-warning" style="--bs-bg-opacity: .1;">
                         <div class="row text-center">
-                            <div class="col-2">작성자</div>
+                            <div class="col-2 fw-bold">작성자</div>
                             <div class="col-4">{{post.author}}</div>
-                            <div class="col-2">조회수</div>
+                            <div class="col-2 fw-bold">조회수</div>
                             <div class="col-4">{{post.hits}}</div>
                         </div> 
                     </li>
                     <li class="list-group-item">
                         <div class="row text-center">
-                            <div class="col-6">작성일</div>
+                            <div class="col-6 fw-bold">작성일</div>
                             <div class="col-6">{{post.created_at}}</div>
                         </div> 
                     </li>
                     <li class="list-group-item">
                         <div class="row text-center">
-                            <div class="col-6">최종수정일</div>
+                            <div class="col-6 fw-bold">최종수정일</div>
                             <div class="col-6">{{post.updated_at}}</div>
                         </div> 
                     </li>
-                    <li class="list-group-item">
-                        <div class="row text-center">
-                            <div class="col-12">내용</div>
+                    <li class="list-group-item bg-warning" style="--bs-bg-opacity: .1;">
+                        <div class="row text-center" >
+                            <div class="col-12 fw-bold">내용</div>
                         </div> 
                     </li>
                 </ul>
-                <p class="card-text">{{post.content}}</p>
+                {% if post.image %}
+                <img src="{{ post.image.url }}" class="card-img my-2" alt="..."> 
+                {% endif %}
+                <pre class="card-text">{{post.content}}</pre>
             </div>
           </div>
         <br>
@@ -63,7 +66,7 @@
             <hr>
             <ul class="list-group list-group-flush">
             {% for comment in comments %}
-                <li class="list-group-item" id="comment_{{forloop.counter}}">
+                <li class="list-group-item bg-success" id="comment_{{forloop.counter}}" style="--bs-bg-opacity: .1;">
                     <div class="row">
                         <div class="col-8">
                             {{comment.author}}
@@ -72,7 +75,7 @@
                         </div>
                         <div class="col-4">
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                {% if user == comment.author or user.is_superuser %}
+                                {% if user == comment.author or user.is_superuser or user == post.author %}
                                 <form action="{% url 'blog:cm-delete' cm_id=comment.pk %}" method="post">
                                     {% csrf_token %}
                                     <input type="submit" class="btn btn-outline-danger" value="X">
@@ -86,15 +89,15 @@
                     </div>
                     {% with recomments=comment.recomment_set.all %}
                     {% for recomment in recomments %}
-                    <div class="row">
+                    <div class="row bg-success py-1 border-bottom" style="--bs-bg-opacity: .2;">
                         <div class="col-1">re:</div>
-                        <div class="col-7">
-                            {{ recomment.author }} : 
+                        <div class="col-2">{{ recomment.author }}</div>
+                        <div class="col-5">
                             {{ recomment.content }}
                             {{ recomment.created_at }}
                         </div>
                         <div class="col-4">
-                            {% if user == recomment.author or user.is_superuser %}
+                            {% if user == recomment.author or user.is_superuser or user == post.author%}
                             <form action="{% url 'blog:rcm-delete' post_id=post.pk rcm_id=recomment.pk %}" method="post">
                                 {% csrf_token %}
                                 <input type="submit" class="btn btn-outline-danger" value="X">
@@ -104,12 +107,16 @@
                     </div>
                     {% endfor %}
                     {% endwith%}
-                    <div class="row hidden">
+                    <div class="row p-2 hidden">
                         <form action="{% url 'blog:rcm-write' post_id=post.pk cm_id=comment.pk %}" method="post">
-                        
                             {% csrf_token %}
-                            {{ recomment_form.as_p }}
-                            <input type="submit" class="btn btn-outline-danger" value="작성!">
+                            <div class="row ">
+                                <div class="col-2">
+                                    <span class="">대댓글</span>
+                                </div>
+                                <div class="col-8">{{ recomment_form.content }}</div>
+                                <div class="col-2"><input type="submit" class="btn btn-outline-danger" value="작성!"></div>
+                            </div>
                         </form>
                     </div>
                 </li>

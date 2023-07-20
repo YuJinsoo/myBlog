@@ -75,6 +75,7 @@ class PostWrite(LoginRequiredMixin, View):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
+            
             post.save()
             return redirect('blog:list')
         
@@ -85,7 +86,8 @@ class PostWrite(LoginRequiredMixin, View):
 class PostEdit(LoginRequiredMixin, View):
     def get(self, request, post_id):
         post = get_object_or_404(Post, pk=post_id)
-        form = PostForm(initial={'title':post.title, 'content':post.content, 'category': post.category, 'author': post.author})
+        form = PostForm(initial={'title':post.title, 'content':post.content, 'category': post.category, 'author': post.author, 'imgae': post.image})
+        
         context = {
             'post': post,
             'form': form
@@ -102,6 +104,8 @@ class PostEdit(LoginRequiredMixin, View):
                 post.title = form.cleaned_data["title"]
                 post.content = form.cleaned_data["content"]
                 post.category = form.cleaned_data["category"]
+                post.image = request.FILES['image']
+                
                 post.save()
                 return redirect('blog:detail', post_id=post_id)
             

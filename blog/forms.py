@@ -6,7 +6,7 @@ class PostForm(forms.ModelForm):
     
     class Meta:
         model = Post
-        fields = ['title', 'content', 'category']
+        fields = ['title', 'content', 'image', 'category']
 
 
 class CommentForm(forms.ModelForm):
@@ -15,7 +15,10 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['content']
         widgets = {
-            'content': forms.Textarea(attrs={'rows':'3', 'cols':'50'})
+            'content': forms.Textarea(attrs={
+                'style' : 'height:4em',
+                'class':'form-control'
+                })
         }
 
 
@@ -25,5 +28,7 @@ class ReCommentForm(forms.ModelForm):
         model = ReComment
         fields = ['content']
         widgets = {
-            'content': forms.Textarea(attrs={'rows':'3', 'cols':'40'})
+            'content': forms.Textarea(attrs={
+                'style' : 'height:4em',
+                'class':'form-control'})
         }
