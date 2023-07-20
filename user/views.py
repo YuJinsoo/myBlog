@@ -77,7 +77,7 @@ class Logout(View):
             print('Bye~')
             logout(request)
         
-        return redirect('blog:list')
+        return redirect('/')
 
 
 class MyPage(LoginRequiredMixin, View):
