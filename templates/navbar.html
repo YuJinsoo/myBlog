@@ -12,14 +12,12 @@
                 <li class="nav-item">
                 <a class="nav-link" href="{% url 'blog:list' %}">Blog</a>
                 </li>
-            
-                
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'user:logout' %}" data-toggle="modal" data-target="#loginModal"><span>Log Out</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark">반갑습니다 <span class="text-primary fs-6 text">{{user.username}}</span> 님!</a>
+                    <a class="nav-link text-dark" href="{% url 'user:mypage' %}">반갑습니다 <span class="text-primary fs-6 text">{{user.username}}</span> 님!</a>
                 </li>
                 {% else %}
                 <li class="nav-item">

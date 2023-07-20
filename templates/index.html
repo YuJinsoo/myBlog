@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <main class="container">
+    <main class="container" style="height:65vh;">
         <div class="row justify-content-center py-5">
             <div class="col-8 text-center">
                 <h1>블로그에 온 것을 환영합니다!</h1>
@@ -10,8 +10,13 @@
         <div class="row justify-content-center">
             <div class="d-grid gap-2 col-6 mx-auto">
                 <a href="{% url 'blog:list' %}" class="btn btn-success">게시판 보기</a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'user:logout' %}" class="btn btn-success">로그아웃</a>
+                <a href="{% url 'user:mypage' %}" class="btn btn-success">마이페이지</a>
+                {% else %}
                 <a href="{% url 'user:login' %}" class="btn btn-success">로그인</a>
                 <a href="{% url 'user:register' %}" class="btn btn-success">회원가입</a>
+                {% endif %}
             </div>
         </div>
     </main>

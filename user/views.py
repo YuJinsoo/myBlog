@@ -2,7 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .forms import LoginForm, RegisterForm
+
 
 class Register(View):
     def get(self, request):
@@ -27,6 +30,7 @@ class Register(View):
             'form': form,
         }
         return render(request, 'user_register.html', context=context)
+
 
 class Login(View):
     def get(self, request):
@@ -67,7 +71,6 @@ class Login(View):
         return redirect('blog:list')
 
 
-
 class Logout(View):
     def get(self, request):
         if request.user.is_authenticated:
@@ -75,3 +78,12 @@ class Logout(View):
             logout(request)
         
         return redirect('blog:list')
+
+
+class MyPage(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user
+        context = {
+            'user': user,
+        }
+        return render(request, 'user/user_mypage.html', context=context)

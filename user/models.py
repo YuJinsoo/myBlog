@@ -33,12 +33,11 @@ class UserManager(BaseUserManager):
 
     
 class User(AbstractUser):
-    # email 이 중복되면 안되는 옵션. unique
     # 한 테이블에 unique는 1개만 있을 수 있습니다.
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True, max_length=255)
     
-    # null과 blank 허용. 보통 둘다 사용함
+    # null과 blank 허용
     name = models.CharField(max_length=50, null=True, blank=True)
 
     is_staff = models.BooleanField(default=False)
@@ -46,10 +45,5 @@ class User(AbstractUser):
     last_login = models.DateField(null=True, blank=True)
     date_joined = models.DateField(auto_now_add=True)
     
-    # USERNAME_FIELD로 지정한 column은 없어야함
-    # REQUIRED_FIELDS = [username, email] #필수 요소 설정가능
-    
     objects = UserManager()
     
-    # def __str__(self):
-    #     return self.name

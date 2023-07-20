@@ -11,5 +11,6 @@ urlpatterns = [
     path("login/", views.Login.as_view(), name="login"),
     # 로그아웃요청
     path("logout/", views.Logout.as_view(), name="logout"),
-    
+    # 마이페이지
+    path("mypage/", views.MyPage.as_view(), name="mypage"),
 ]

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main class="container" style="height:65vh;">
+    <h1 class="my-3">마이 페이지</h1>
+    <h3 class="my-2">안녕하세요 {{user.username}} 님!</h3>
+    
+    <div class="row">
+        회원 아이디 : {{user.username}}
+    </div>
+    <div class="row">
+        회원 이메일 : {{user.email}}
+    </div>
+
+    <h2>아직 미구현 상태입니다. profile과 회원정보 변경 기능 개발 예정</h2>
+
+</main>
+{% endblock %}
