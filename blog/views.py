@@ -85,7 +85,7 @@ class PostWrite(LoginRequiredMixin, View):
 class PostEdit(LoginRequiredMixin, View):
     def get(self, request, post_id):
         post = get_object_or_404(Post, pk=post_id)
-        print(post.image)
+        # print(post.image)
         form = PostForm(initial={'title':post.title, 'content':post.content, 'category': post.category, 'author': post.author, 'image': post.image })
         
         context = {
@@ -99,16 +99,15 @@ class PostEdit(LoginRequiredMixin, View):
         
         if post.author == request.user or request.user.is_superuser:
             form = PostForm(request.POST, request.FILES)
-            # print(form.is_valid())
+
             if form.is_valid():
                 post.title = form.cleaned_data["title"]
                 post.content = form.cleaned_data["content"]
                 post.category = form.cleaned_data["category"]
+                post.image = request.POST['originimage'] # form의 input들의 name이 key로, value는 value로 들어감.
                 
                 if request.FILES :
                     post.image = request.FILES['image']
-                else:
-                    post.image = form.cleaned_data["image"]
                 
                 post.save()
                 return redirect('blog:detail', post_id=post_id)
