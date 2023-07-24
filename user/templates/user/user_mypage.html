@@ -15,5 +15,56 @@
 
     <h2>아직 미구현 상태입니다. profile과 회원정보 변경 기능 개발 예정</h2>
 
+
+    <div class="row justify-content-center">
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <a href="" class="btn btn-success">회원정보 수정</a>
+            {% if not user.profile %}
+            <button class="btn btn-success" id="profilebtn" data-bs-toggle="modal" data-bs-target="#profileModal">프로필 생성 및 수정</button>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if user.profile %}
+    <div>프로필이 있네요</div>
+    {% else %}
+    <div>프로필이 없습니다.</div>
+    {% endif %}
+
 </main>
+
+<!-- Profile modal -->
+<div class="modal" id="profileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profileModalTitle">프로필 작성</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+        <form action="{% url 'user:profile' %}" method="post">
+        {% csrf_token %}
+            <div class="modal-body">
+                <p>프로필 정보를 입력해주세요</p>
+                <p>계정 : {{ user.username }}</p>
+                {{profile_form.nickname}}
+                {{profile_form.birthday}}
+                {{profile_form.profile_image}}
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="프로필 저장">
+                </div>
+            </div>
+        </form ac>
+    </div>
+</div>
+
+<script>
+    let profModal = document.querySelector('#profileModal')
+    let profbtn = document.querySelector('#profilebtn')
+
+    profModal.addEventListener("shown.bs.modal", function (e) {
+        e.preventDefault();
+        });
+</script>
 {% endblock %}

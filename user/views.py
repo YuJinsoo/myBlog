@@ -4,8 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import LoginForm, RegisterForm
-
+from .forms import LoginForm, RegisterForm, ProfileForm
+from .models import Profile
 
 class Register(View):
     def get(self, request):
@@ -83,7 +83,22 @@ class Logout(View):
 class MyPage(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
+        profile_form = ProfileForm()
         context = {
             'user': user,
+            'profile_form': profile_form
         }
         return render(request, 'user/user_mypage.html', context=context)
+
+
+class EditProfile(LoginRequiredMixin, View):
+    def post(self, request):
+        print(request.POST)
+        nickname = request.POST['nickname']
+        birthday = request.POST['birthday']
+        profile_image = request.POST['profile_image']
+        print(nickname, birthday, profile_image)
+        
+        Profile(nickname=nickname, birthday=birthday, profile_image=profile_image).save()
+        
+        return redirect('user:mypage')

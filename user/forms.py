@@ -2,6 +2,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model  
+from .models import Profile
+
+from datetime import date
 
 User = get_user_model()
 
@@ -49,3 +52,32 @@ class LoginForm(AuthenticationForm):
         #     'email': forms.EmailField(attrs={'placeholder':'email'}),
         #     'password': forms.PasswordInput(attrs={'placeholder':'password'})
         # }
+
+
+class DateInput(forms.DateInput):
+    input_type='date'
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta():
+        model = Profile
+        fields = ['user', 'nickname', 'birthday', 'profile_image']
+        widgets = {
+            'nickname': forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    'placeholder': '별명 50자'
+                }
+            ),
+            'birthday': DateInput(
+                attrs={
+                    'class': 'form-control',
+                    # 'placeholder': '생년월일'
+                }
+            ),
+            'profile_image': forms.FileInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            )
+        }
