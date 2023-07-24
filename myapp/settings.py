@@ -30,7 +30,7 @@ LOGIN_URL = '/user/login'
 SECRET_KEY = my_setting.Django_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = my_setting.Django_DEBUG
 
 ALLOWED_HOSTS = ['*']
 

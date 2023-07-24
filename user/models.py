@@ -46,4 +46,10 @@ class User(AbstractUser):
     date_joined = models.DateField(auto_now_add=True)
     
     objects = UserManager()
-    
+
+
+class Profile(models.Model):
+    user = models.OneToOneField('User', on_delete=models.CASCADE, primary_key=True)
+    nickname = models.TextField(max_length=50, null=True, blank=True)
+    birthday = models.DateField(null=True, blank=True)
+    profile_image = models.ImageField(upload_to="profileimages/", null=True, blank=True)
