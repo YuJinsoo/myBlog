@@ -128,13 +128,10 @@ class EditProfile(LoginRequiredMixin, View):
         return redirect('user:mypage')
 
 
-# django.contrib.auth.views.PasswordChangeView
-# PasswordChangeView 를 이용해서 간단히 개발할 수 있습니다.
+# django.contrib.auth.views.PasswordChangeView 를 이용해서 간단히 개발할 수 있습니다.
 class ChangUserPassword(LoginRequiredMixin, View):
     def get(self, request):
         form = UserPasswordChangeForm(request.user)
-        print(dir(form))
-        print(form.hidden_fields)
         context ={
             'form': form,
         }
@@ -151,4 +148,7 @@ class ChangUserPassword(LoginRequiredMixin, View):
         else:
             messages.error(request, 'Please correct the error below.')
         
-        return render(request, 'user/user_pwedit.html', {'form':form})
+        context = {
+            'form':form,
+        }
+        return render(request, 'user/user_pwedit.html', context=context)
