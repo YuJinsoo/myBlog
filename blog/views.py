@@ -14,10 +14,13 @@ from .forms import PostForm, CommentForm, ReCommentForm
 class PostList(View):
     def get(self, request):
         posts = Post.objects.all().order_by('-created_at')
-        category = Category.objects.all()
+        categories = Category.objects.all()
+        cat_null_posts = Post.objects.filter(category__isnull=True)
         context = {
             "posts": posts,
-            "category": category
+            "categories": categories,
+            "all_posts" : posts,
+            "cat_null_posts": cat_null_posts
         }
         return render(request, "blog/post_list.html", context=context)
 
@@ -147,10 +150,17 @@ class PostSearchQuery(View):
 
 
 class PostSearch(View):
+    # TODO 추후 여러개, 제목/내용/작성자 에 대한 검색, 대소문자 고려해보기
+    pass
+
+
+class CategorySearch(View):
     def get(self, request, cat):
         ## 단일 카테고리에 일치하는 것만 검색
-        # TODO 추후 여러개, 제목/내용/작성자 에 대한 검색, 대소문자 고려해보기
-        if cat == 'etc':
+        all_posts = Post.objects.all()
+        categories = Category.objects.all()
+        cat_null_posts = Post.objects.filter(category__isnull=True)
+        if cat == "None":
             posts =  Post.objects.filter(category=None).order_by('-created_at')
         else:
             category = Category.objects.filter(name=cat)
@@ -163,6 +173,9 @@ class PostSearch(View):
         context = {
             'posts' : posts,
             'searchtag': cat,
+            "all_posts" : all_posts,
+            'categories': categories,
+            'cat_null_posts': cat_null_posts,
         }
         return render(request, 'blog/post_list.html', context=context)
     

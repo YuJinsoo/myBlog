@@ -20,7 +20,7 @@ urlpatterns = [
     # 카테고리 게시글 검색요청
     path("search/", views.PostSearchQuery.as_view(), name="search-query"),
     # 게시글 검색결과
-    path("search/<str:cat>/", views.PostSearch.as_view(), name="search"),
+    path("category/<str:cat>/", views.CategorySearch.as_view(), name="search-category"),
     # 코멘트 작성
     path("detail/<int:post_id>/comment/write/", views.CommentWrite.as_view(), name="cm-write"),
     # 코멘트 삭제

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 ## auth를 확장된 모델을 가져오게 됩니다.
 User = get_user_model()
@@ -37,3 +38,7 @@ class Category(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse("blog:search-category", kwargs={"cat": self.name})
+    
