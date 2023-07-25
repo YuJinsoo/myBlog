@@ -38,12 +38,15 @@
                 {% else %}
                     <div>등록된 게시물이 없습니다.</div>
                 {% endif %}
+
+                {% comment %}
                 <p>카테고리검색</p>
                 <form action="{% url 'blog:search-query' %}" method="get">
                     {%csrf_token%}
                     <input type="text" id="kw" name="cat">
                     <input type="submit" value="검색">
                 </form>
+                {% endcomment %}
             </div>
 
             <!-- Categories -->
@@ -60,7 +63,18 @@
                         <a href="{% url 'blog:list' %}" class="badge rounded-pill bg-info text-dark text-decoration-none">All ({{ all_posts.count }})</a>
                     </div>
                 </div>
+                <!-- Search -->
+                <div class="card mb-4" id="search-card">
+                    <div class="card-header">Search</div>
+                    <div class="card-body">
+                        <form action="" method="get">
+                            <input type="text" class="form-control" name="search">
+                            <input type="submit" class="btn btn-primary">
+                        </form>
+                    </div>
+                </div>
             </div>
+            
         </div>
     </main>
 
