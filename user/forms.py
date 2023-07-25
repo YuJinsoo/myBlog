@@ -1,6 +1,6 @@
 # user를 auth를 사용해서 개발했으니 폼도 auth에서 제공하는 form을 사용해야 합니다.
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import get_user_model  
 from .models import Profile
 
@@ -57,6 +57,7 @@ class LoginForm(AuthenticationForm):
 class DateInput(forms.DateInput):
     input_type='date'
 
+
 class ProfileForm(forms.ModelForm):
     class Meta():
         model = Profile
@@ -80,3 +81,24 @@ class ProfileForm(forms.ModelForm):
                 }
             )
         }
+
+
+class UserPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['old_password'].label = '기존 비밀번호'
+        self.fields['old_password'].widget.attrs.update({
+            'class': 'form-control',
+            'autofocus': False,
+        })
+        self.fields['new_password1'].label = '새 비밀번호'
+        self.fields['new_password1'].widget.attrs.update({
+            'class': 'form-control',
+        })
+        self.fields['new_password2'].label = '새 비밀번호 확인'
+        self.fields['new_password2'].widget.attrs.update({
+            'class': 'form-control',
+        })
+    
+    # class Meta():
+    #     fields = ['old_password', 'new_password1', 'new_password2'] 

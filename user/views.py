@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import LoginForm, RegisterForm, ProfileForm
+from django.contrib import messages
+
+from .forms import LoginForm, RegisterForm, ProfileForm, UserPasswordChangeForm
 from .models import Profile
 
 class Register(View):
@@ -126,11 +128,27 @@ class EditProfile(LoginRequiredMixin, View):
         return redirect('user:mypage')
 
 
-# class EditProfile(LoginRequiredMixin, View):
-#     def post(sefl, request):
-#         profile = get_object_or_404(Profile, user=request.user)
-#         profile.nickname = request.POST['nickname']
-#         profile.birthday = request.POST['birthday']
-#         profile.profile_image = request.POST['profile_image']
+# django.contrib.auth.views.PasswordChangeView
+# PasswordChangeView 를 이용해서 간단히 개발할 수 있습니다.
+class ChangUserPassword(LoginRequiredMixin, View):
+    def get(self, request):
+        form = UserPasswordChangeForm(request.user)
+        print(dir(form))
+        print(form.hidden_fields)
+        context ={
+            'form': form,
+        }
+        return render(request, 'user/user_pwedit.html', context)
         
-#         return redirect('uset:mypage')
+    def post(self, request):
+        form = UserPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.user = request.user
+            user = form.save()
+            update_session_auth_hash(request, user)  # 비밀번호 변경 후에도 변경된 비밀번호로 로그인 세션 유지해줌
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('user:mypage')
+        else:
+            messages.error(request, 'Please correct the error below.')
+        
+        return render(request, 'user/user_pwedit.html', {'form':form})

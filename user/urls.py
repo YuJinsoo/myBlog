@@ -14,5 +14,8 @@ urlpatterns = [
     # 마이페이지
     path("mypage/", views.MyPage.as_view(), name="mypage"),
     # 프로필 생성, 수정
-    path("profile/create", views.EditProfile.as_view(), name='pf-edit'),
+    path("profile/create/", views.EditProfile.as_view(), name='pf-edit'),
+    # 회원 비밀번호 수정
+    path("password/change/", views.ChangUserPassword.as_view(), name='pw-edit'),
+    
 ]

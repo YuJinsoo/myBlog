@@ -15,7 +15,8 @@
             <div>회원 이메일 : {{user.email}}</div>
         </div>
         <div class="row justify-content-center ">
-            <div class="col-4 d-grid"><a href="" class="btn btn-success">회원정보 수정</a></div c>
+            <div class="col-4 d-grid"><button class="btn btn-success" id="userchangbtn" data-bs-toggle="modal" data-bs-target="#userModal">회원정보 확인</button></div>
+            <div class="col-4 d-grid"><a href="{% url 'user:pw-edit' %}" class="btn btn-success">비밀번호 변경</a></div>
         </div>
     </div>
 
@@ -28,7 +29,8 @@
         <div class="card-body">
             <div>별명 : {{profile.nickname}}</div>
             <div>생일 : {{profile.birthday|date:'Y-m-d'}}</div>
-            <div>프사 : <img src="{{user.profile.profile_image.url}}" class="card-img my-2"></div>
+            <div>프로필 사진 : </div>
+            <img src="{{user.profile.profile_image.url}}" class="card-img my-2" style="width:200px; height:200px;">
         </div>
         {% else %}
         <div class="row justify-content-center">프로필이 없습니다.</div>
@@ -52,6 +54,29 @@
     
 
 </main>
+
+<!-- User Edit modal -->
+<div class="modal" id="userModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userModalTitle">회원정보 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+            </div>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="modal-body">
+                <p>내 정보</p>
+                <p>계정 아이디 : {{ user.username }}</p>
+                <p>이메일 : {{ user.email }}</p>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <!-- Profile modal -->
 <div class="modal" id="profileModal" tabindex="-1">
@@ -97,6 +122,14 @@
         e.preventDefault();
         });
     
+    let userModal = document.querySelector('#userModal');
+    let userbtn = document.querySelector('#userchangbtn');
+
+    userModal.addEventListener("shown.bs.modal", function (e) {
+        e.preventDefault();
+        });
+
+
     let nicknamehidden = document.querySelector('#id_nickname')
     nicknamehidden.classList.add('hide')
 

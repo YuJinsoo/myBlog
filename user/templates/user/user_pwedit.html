@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main class="container">
+    <div class="row justify-content-center py-5">
+        <div class="col-8 text-center">
+            <h1>비밀번호 변경</h1>
+        </div>
+    </div>
+    <form action="{% url 'user:pw-edit' %}" method="post">
+        {% csrf_token %}
+        
+        <div class="d-grid gap-2 col-6 mx-auto">
+            {{ form }}
+            {% if form.errors %}
+            <div class="alert alert-danger">
+            {% for field in form %}
+                <!-- 필드 오류 -->
+                {% if field.errors %}
+                <div>
+                    <strong>{{ field.label }}</strong>
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+                <!-- 넌필드 오류 -->
+                {% for error in form.non_field_errors %}
+                <div>
+                    <strong>{{ error }}</strong>
+                </div>
+                {% endfor %}
+            {% endfor %}
+            </div>
+            {% endif %}
+            <input type="submit" value="비밀번호 수정" class="btn btn-lg btn-primary btn-block">
+            {% comment %}
+            <div class="row mb-3 justify-content-center">
+                <div class="col-4">이전 비밀번호</div>
+                <div class="col-8">{{form.old_password}}</div>
+            </div>
+            <div class="row mb-3 justify-content-center">
+                <div class="col-4">새 비밀번호</div>
+                <div class="col-8">{{form.new_password1}}</div>
+            </div>
+            <div class="row mb-3 justify-content-center">
+                <div class="col-4">비밀번호 확인</div>
+                <div class="col-8">{{form.new_password2}}</div>
+            </div>
+            <input type="submit" value="비밀번호 수정" class="btn btn-lg btn-primary btn-block">
+            {% endcomment %}
+        </div>
+    </form>
+</main>
+
+
+{% endblock %}
