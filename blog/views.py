@@ -104,7 +104,7 @@ class PostEdit(LoginRequiredMixin, View):
                 post.title = form.cleaned_data["title"]
                 post.content = form.cleaned_data["content"]
                 post.category = form.cleaned_data["category"]
-                post.image = request.POST['originimage'] # form의 input들의 name이 key로, value는 value로 들어감.
+                post.image = request.POST['originimage'] # form안 input들의 name이 key로, value는 value로 들어감.
                 
                 if request.FILES :
                     post.image = request.FILES['image']

@@ -84,21 +84,53 @@ class MyPage(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         profile_form = ProfileForm()
+        profile = None
+        
+        if hasattr(user, "profile"):
+            profile = user.profile
+            profile_form = ProfileForm(initial={
+                'user': profile.user,
+                'nickname': profile.nickname, 
+                'birthday': profile.birthday,
+                'profile_image': profile.profile_image
+            })
+            
         context = {
             'user': user,
-            'profile_form': profile_form
+            'profile_form': profile_form,
+            'profile': profile
         }
         return render(request, 'user/user_mypage.html', context=context)
 
 
 class EditProfile(LoginRequiredMixin, View):
     def post(self, request):
-        print(request.POST)
         nickname = request.POST['nickname']
         birthday = request.POST['birthday']
-        profile_image = request.POST['profile_image']
-        print(nickname, birthday, profile_image)
-        
-        Profile(nickname=nickname, birthday=birthday, profile_image=profile_image).save()
-        
+        print(request.POST['birthday'])
+            
+        if request.POST["type"] == "create":
+            profile_image = None
+            if hasattr(request.FILES, 'profile_image'):
+                profile_image = request.FILES['profile_image']
+            Profile(user=request.user, nickname=nickname, birthday=birthday, profile_image=profile_image).save()
+        else:
+            profile = get_object_or_404(Profile, user=request.user)
+            profile.nickname = request.POST['nickname']
+            profile.birthday = request.POST['birthday']
+            if hasattr(request.FILES,'profile_image'):
+                profile.profile_image= request.FILES['profile_image']
+            
+            profile.save()
+            
         return redirect('user:mypage')
+
+
+# class EditProfile(LoginRequiredMixin, View):
+#     def post(sefl, request):
+#         profile = get_object_or_404(Profile, user=request.user)
+#         profile.nickname = request.POST['nickname']
+#         profile.birthday = request.POST['birthday']
+#         profile.profile_image = request.POST['profile_image']
+        
+#         return redirect('uset:mypage')

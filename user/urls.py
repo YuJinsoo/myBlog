@@ -13,6 +13,6 @@ urlpatterns = [
     path("logout/", views.Logout.as_view(), name="logout"),
     # 마이페이지
     path("mypage/", views.MyPage.as_view(), name="mypage"),
-    # 프로필 수정/생성
-    path("profile/", views.EditProfile.as_view(), name='profile')
+    # 프로필 생성, 수정
+    path("profile/create", views.EditProfile.as_view(), name='pf-edit'),
 ]

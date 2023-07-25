@@ -57,7 +57,6 @@ class LoginForm(AuthenticationForm):
 class DateInput(forms.DateInput):
     input_type='date'
 
-
 class ProfileForm(forms.ModelForm):
     class Meta():
         model = Profile
@@ -66,7 +65,7 @@ class ProfileForm(forms.ModelForm):
             'nickname': forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    'placeholder': '별명 50자'
+                    # 'placeholder': '별명 50자'
                 }
             ),
             'birthday': DateInput(
