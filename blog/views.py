@@ -96,7 +96,7 @@ class PostEdit(LoginRequiredMixin, View):
     
     def post(self, request, post_id):
         post =Post.objects.get(pk=post_id)
-        
+        checked = request.POST.getlist("cancel") # [] or ['1']
         if post.author == request.user or request.user.is_superuser:
             form = PostForm(request.POST, request.FILES)
 
@@ -109,6 +109,9 @@ class PostEdit(LoginRequiredMixin, View):
                 if request.FILES :
                     post.image = request.FILES['image']
                 
+                if bool(checked) :
+                    post.image = None # None 들어가는거 맞겠지?
+                    
                 post.save()
                 return redirect('blog:detail', post_id=post_id)
             
@@ -130,6 +133,7 @@ class PostDelete(LoginRequiredMixin, View):
 
 
 # search url 규칙을 맞추기 위해 요청만 보냄.
+## TODO - 거쳐가지 않고 한번에 가도록 수정해야 함.
 class PostSearchQuery(View):
     def get(self, request):
         print(request)

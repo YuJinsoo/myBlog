@@ -18,7 +18,15 @@
             <div class="col-10 text-center">{{form.content}}</div>
         </div>
         <div class="row py-2 my-2 border-bottom border-2">
-            <div class="col-2 text-center">이미지</div>
+            <div class="col-2 text-center">현재 이미지</div>
+            <div class="col-2">
+                <label for="imgdelete">취소</label>
+                <input type="checkbox" id="imgdelete" name="cancel" unchecked value="1">
+            </div>
+            <div class="col-8">{{post.image}}</div>
+        </div>
+        <div class="row py-2 my-2 border-bottom border-2">
+            <div class="col-2 text-center">새 이미지</div>
             <div class="col-10">{{form.image}}</div>
             <input type="hidden" name="originimage" value="{{ post.image }}">
         </div>
