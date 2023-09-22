@@ -4,6 +4,7 @@ from django.views import View
 
 # auth의 mixin 기능
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from datetime import date, datetime, timedelta
 
 from .models import Post, Comment, Category, ReComment
@@ -14,14 +15,20 @@ from .forms import PostForm, CommentForm, ReCommentForm
 class PostList(View):
     def get(self, request):
         posts = Post.objects.all().order_by('-created_at')
+        paginator = Paginator(posts, 10)
+        page = request.GET.get('page')
+        real_posts = paginator.get_page(page)
+        
         categories = Category.objects.all()
         cat_null_posts = Post.objects.filter(category__isnull=True)
         context = {
             "posts": posts,
             "categories": categories,
+            "posts" : real_posts,
             "all_posts" : posts,
             "cat_null_posts": cat_null_posts
         }
+        # return render(request, "blog/post_list.html", context=context)
         return render(request, "blog/post_list.html", context=context)
 
 
