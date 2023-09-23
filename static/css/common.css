@@ -138,3 +138,14 @@ body {
 	padding: 0;
 	position: absolute;
 }
+
+.othrepage{
+	text-decoration-line: none;
+	color: #777;
+}
+
+.nowpage {
+	text-decoration-line: none;
+	color: #000;
+	font-weight: 900;
+}
