@@ -39,6 +39,23 @@
                     <div>등록된 게시물이 없습니다.</div>
                 {% endif %}
 
+                <div class="text-center" id="pagenator">
+                    {% if posts.has_previous %}
+                        <a href="?page=1" class="othrepage">처음으로</a>
+                    {% endif %}
+                    {% for page in paginator.page_range %}
+                        {% if page == posts.number %}
+                            <a href="?page={{posts.number}}" class="nowpage">현재</a>
+                        {% else %}
+                            <a href="?page={{page}}" class="othrepage">{{page}}</a>
+                        {% endif %}
+                        
+                    {% endfor %}
+                    {% if posts.has_next %}
+                        <a href="?page={{paginator.num_pages}}" type="button" class="othrepage">끝으로</a>
+                    {% endif %}
+                </div>
+
                 {% comment %}
                 <p>카테고리검색</p>
                 <form action="{% url 'blog:search-query' %}" method="get">
