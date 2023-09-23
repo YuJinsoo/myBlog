@@ -4,7 +4,7 @@ from django.views import View
 
 # auth의 mixin 기능
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from datetime import date, datetime, timedelta
 
 from .models import Post, Comment, Category, ReComment
@@ -14,19 +14,30 @@ from .forms import PostForm, CommentForm, ReCommentForm
 
 class PostList(View):
     def get(self, request):
-        posts = Post.objects.all().order_by('-created_at')
-        paginator = Paginator(posts, 10)
-        page = request.GET.get('page')
-        real_posts = paginator.get_page(page)
+        post_list = Post.objects.all().order_by('-created_at')
+        query_pagenum = request.GET.get('page')
         
         categories = Category.objects.all()
         cat_null_posts = Post.objects.filter(category__isnull=True)
+        paginator = Paginator(post_list, 4)
+        
+        # 페이지 수 에러처리.
+        try:
+            posts = paginator.get_page(query_pagenum)
+        except PageNotAnInteger:
+            query_pagenum = 1
+            posts = posts = paginator.get_page(query_pagenum)
+        except EmptyPage:
+            query_pagenum = paginator.num_pages
+            posts = posts = paginator.get_page(query_pagenum)
+            
+        total_page = paginator.num_pages
         context = {
-            "posts": posts,
+            "post_list": post_list,
             "categories": categories,
-            "posts" : real_posts,
-            "all_posts" : posts,
-            "cat_null_posts": cat_null_posts
+            "posts" : posts,
+            "cat_null_posts": cat_null_posts,
+            "paginator": paginator,
         }
         # return render(request, "blog/post_list.html", context=context)
         return render(request, "blog/post_list.html", context=context)
