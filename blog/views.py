@@ -16,6 +16,7 @@ class PostList(View):
     def get(self, request):
         post_list = Post.objects.all().order_by('-created_at')
         query_pagenum = request.GET.get('page')
+        posts_num = len(post_list)
         
         categories = Category.objects.all()
         cat_null_posts = Post.objects.filter(category__isnull=True)
@@ -26,14 +27,15 @@ class PostList(View):
             posts = paginator.get_page(query_pagenum)
         except PageNotAnInteger:
             query_pagenum = 1
-            posts = posts = paginator.get_page(query_pagenum)
+            posts = paginator.get_page(query_pagenum)
         except EmptyPage:
             query_pagenum = paginator.num_pages
-            posts = posts = paginator.get_page(query_pagenum)
+            posts = paginator.get_page(query_pagenum)
             
         total_page = paginator.num_pages
         context = {
             "post_list": post_list,
+            "posts_num": posts_num,
             "categories": categories,
             "posts" : posts,
             "cat_null_posts": cat_null_posts,
@@ -169,31 +171,55 @@ class PostSearchQuery(View):
 
 class PostSearch(View):
     # TODO 추후 여러개, 제목/내용/작성자 에 대한 검색, 대소문자 고려해보기
-    pass
+    
+    def get(self, request):
+        
+        return 
+    
 
 
 class CategorySearch(View):
     def get(self, request, cat):
         ## 단일 카테고리에 일치하는 것만 검색
-        all_posts = Post.objects.all()
+        posts_num = Post.objects.count()
         categories = Category.objects.all()
         cat_null_posts = Post.objects.filter(category__isnull=True)
         if cat == "None":
-            posts =  Post.objects.filter(category=None).order_by('-created_at')
+            post_list =  Post.objects.filter(category=None).order_by('-created_at')
         else:
             category = Category.objects.filter(name=cat)
             
-            if len(category) > 0:
-                posts =  Post.objects.filter(category=category[0]).order_by('-created_at')
+            if category:
+                print("here!")
+                post_list =  Post.objects.filter(category=category[0]).order_by('-created_at')
             else:
-                posts = None
+                post_list = None
 
+        query_pagenum = request.GET.get('page', None)
+        
+        paginator = Paginator(post_list, 4)
+        
+        # 페이지 수 에러처리.
+        try:
+            posts = paginator.get_page(query_pagenum)
+        except PageNotAnInteger:
+            query_pagenum = 1
+            posts = paginator.get_page(query_pagenum)
+        except EmptyPage:
+            query_pagenum = paginator.num_pages
+            posts = paginator.get_page(query_pagenum)
+        
+        # print(posts, posts.number, len(posts))
+        # print(query_pagenum, paginator.page_range, post_list, len(post_list))
+        
+        
         context = {
-            'posts' : posts,
-            'searchtag': cat,
-            "all_posts" : all_posts,
-            'categories': categories,
-            'cat_null_posts': cat_null_posts,
+            "posts" : posts,
+            "posts_num": posts_num,
+            "searchtag": cat,
+            "categories": categories,
+            "cat_null_posts": cat_null_posts,
+            "paginator": paginator,
         }
         return render(request, 'blog/post_list.html', context=context)
     

@@ -17,9 +17,9 @@ urlpatterns = [
     path("edit/<int:post_id>/", views.PostEdit.as_view(), name="edit"),
     # 게시글 삭제
     path("delete/<int:post_id>/", views.PostDelete.as_view(), name="delete"),
-    # 카테고리 게시글 검색요청
+    # 게시글 검색
     path("search/", views.PostSearchQuery.as_view(), name="search-query"),
-    # 게시글 검색결과
+    # 카테고리 종류로 검색
     path("category/<str:cat>/", views.CategorySearch.as_view(), name="search-category"),
     # 코멘트 작성
     path("detail/<int:post_id>/comment/write/", views.CommentWrite.as_view(), name="cm-write"),
