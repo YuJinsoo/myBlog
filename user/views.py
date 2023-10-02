@@ -70,7 +70,9 @@ class Login(View):
         context = {
             'form':form
         }
-        return redirect('blog:list')
+
+        return render(request, 'user/user_login.html', context=context)
+        # return redirect('blog:list')
 
 
 class Logout(View):
