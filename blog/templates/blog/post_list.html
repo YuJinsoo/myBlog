@@ -12,6 +12,9 @@
                 {% if searchtag %}
                     <p>"{{searchtag}}" 카테고리</p>
                 {% endif %}
+                {% if qp %}
+                    <p>"{{qp}}" 검색어 결과</p>
+                {% endif %}
                 {% if posts %}
                 <table class="table">
                     <thead class="table-light">
@@ -45,14 +48,14 @@
                     {% endif %}
                     {% for page in paginator.page_range %}
                         {% if page == posts.number %}
-                            <a href="?page={{posts.number}}" class="nowpage">현재</a>
+                            <a href="?search={{qp}}&page={{posts.number}}" class="nowpage">현재</a>
                         {% else %}
-                            <a href="?page={{page}}" class="otherpage">{{page}}</a>
+                            <a href="?search={{qp}}&page={{page}}" class="otherpage">{{page}}</a>
                         {% endif %}
                         
                     {% endfor %}
                     {% if posts.has_next %}
-                        <a href="?page={{paginator.num_pages}}" type="button" class="otherpage">끝으로</a>
+                        <a href="?search={{qp}}&page={{paginator.num_pages}}" type="button" class="otherpage">끝으로</a>
                     {% endif %}
                 </div>
 
@@ -84,7 +87,7 @@
                 <div class="card mb-4" id="search-card">
                     <div class="card-header">Search</div>
                     <div class="card-body">
-                        <form action="" method="get">
+                        <form action="{% url 'blog:post-search' %}" method="get">
                             <input type="text" class="form-control" name="search">
                             <input type="submit" class="btn btn-primary">
                         </form>

@@ -16,10 +16,11 @@ class PostList(View):
     def get(self, request):
         post_list = Post.objects.all().order_by('-created_at')
         query_pagenum = request.GET.get('page')
-        posts_num = len(post_list)
         
+        posts_num = len(post_list)
         categories = Category.objects.all()
         cat_null_posts = Post.objects.filter(category__isnull=True)
+        
         paginator = Paginator(post_list, 4)
         
         # 페이지 수 에러처리.
@@ -173,8 +174,42 @@ class PostSearch(View):
     # TODO 추후 여러개, 제목/내용/작성자 에 대한 검색, 대소문자 고려해보기
     
     def get(self, request):
+        qp = request.GET.get('search', None)
+        query_pagenum = request.GET.get('page', None)
         
-        return 
+        if qp == None:
+            return redirect('blog:list')
+        else:
+            search_result = Post.objects.filter(title__icontains=qp)
+            print(search_result)
+            
+            posts_num = len(search_result)
+            categories = Category.objects.all()
+            cat_null_posts = Post.objects.filter(category__isnull=True)
+            
+            paginator = Paginator(search_result, 4)
+            # 페이지 수 에러처리.
+            try:
+                posts = paginator.get_page(query_pagenum)
+            except PageNotAnInteger:
+                query_pagenum = 1
+                posts = paginator.get_page(query_pagenum)
+            except EmptyPage:
+                query_pagenum = paginator.num_pages
+                posts = paginator.get_page(query_pagenum)
+                
+            total_page = paginator.num_pages
+            context = {
+                "post_list": search_result,
+                "posts_num": posts_num,
+                "categories": categories,
+                "posts" : posts,
+                "cat_null_posts": cat_null_posts,
+                "paginator": paginator,
+                "qp": qp,
+            }
+
+            return render(request, "blog/post_list.html", context=context)
     
 
 
@@ -212,7 +247,6 @@ class CategorySearch(View):
         # print(posts, posts.number, len(posts))
         # print(query_pagenum, paginator.page_range, post_list, len(post_list))
         
-        
         context = {
             "posts" : posts,
             "posts_num": posts_num,
@@ -233,7 +267,7 @@ class CommentWrite(LoginRequiredMixin, View):
             content = form.cleaned_data['content']
             author = request.user
             
-            commnet = Comment.objects.create(post=post, content=content, author=author)
+            comment = Comment.objects.create(post=post, content=content, author=author)
             
             return redirect("blog:detail", post_id=post_id)
         
