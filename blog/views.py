@@ -158,16 +158,16 @@ class PostDelete(LoginRequiredMixin, View):
 
 # search url 규칙을 맞추기 위해 요청만 보냄.
 ## TODO - 거쳐가지 않고 한번에 가도록 수정해야 함.
-class PostSearchQuery(View):
-    def get(self, request):
-        print(request)
-        print(request.GET)
-        cat = request.GET.get('cat')
-        if cat == '':
-            cat = 'All'
-            return redirect('blog:list')
-        print(cat)
-        return redirect('blog:search', cat=cat)
+# class PostSearchQuery(View):
+#     def get(self, request):
+#         print(request)
+#         print(request.GET)
+#         cat = request.GET.get('cat')
+#         if cat == '':
+#             cat = 'All'
+#             return redirect('blog:list')
+#         print(cat)
+#         return redirect('blog:search', cat=cat)
 
 
 class PostSearch(View):
