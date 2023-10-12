@@ -15,8 +15,15 @@
             <div>회원 이메일 : {{user.email}}</div>
         </div>
         <div class="row justify-content-center ">
-            <div class="col-4 d-grid"><button class="btn btn-success" id="userchangbtn" data-bs-toggle="modal" data-bs-target="#userModal">회원정보 확인</button></div>
-            <div class="col-4 d-grid"><a href="{% url 'user:pw-edit' %}" class="btn btn-success">비밀번호 변경</a></div>
+            <div class="col-4 d-grid">
+                <button class="btn btn-success" id="userchangebtn" data-bs-toggle="modal" data-bs-target="#userModal">회원정보 확인</button>
+            </div>
+            <div class="col-4 d-grid">
+                <a href="{% url 'user:pw-edit' %}" class="btn btn-success">비밀번호 변경</a>
+            </div>
+            <div class="col-4 d-grid">
+                <button class="btn btn-success" id="userpostsbtn" data-bs-toggle="modal" data-bs-target="#userPostsModal">내 작성글</button>
+            </div>
         </div>
     </div>
 
@@ -114,18 +121,61 @@
     </div>
 </div>
 
+<!-- User Post modal -->
+<div class="modal" id="userPostsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userPostsModalTitle">내가 작성한 게시물</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+            </div>
+            <div class="modal-body">
+                {% if my_posts %}
+                <table class="table">
+                    <thead>
+                        <th>글번호</th>
+                        <th>제목</th>
+                        <th>작성일</th>
+                        <th> </th>
+                    </thead>
+                    <tbody>
+                        {% for post in my_posts %}
+                        <tr>
+                            <td>{{post.id}}</td>
+                            <td>{{post.title}}</td>
+                            <td>{{post.created_at}}</td>
+                            <td><a href="{% url 'blog:detail' post_id=post.id %}" class="btn btn-primary">보기</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <p>작성한 게시물이 없습니다.</p>
+                {% endif%}
+            </div>
+        
+    </div>
+</div>
+
 <script>
     let profModal = document.querySelector('#profileModal');
     let profbtn = document.querySelector('#profilebtn');
+    
 
     profModal.addEventListener("shown.bs.modal", function (e) {
         e.preventDefault();
         });
     
     let userModal = document.querySelector('#userModal');
-    let userbtn = document.querySelector('#userchangbtn');
+    let userbtn = document.querySelector('#userchangebtn');
 
     userModal.addEventListener("shown.bs.modal", function (e) {
+        e.preventDefault();
+        });
+    
+    let postsModal = document.querySelector('#userPostsModal');
+    let postsbtn = document.querySelector('#userpostsbtn')
+    postsModal.addEventListener("shown.bs.modal", function(e) {
         e.preventDefault();
         });
 

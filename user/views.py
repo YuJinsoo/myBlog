@@ -87,6 +87,8 @@ class Logout(View):
 class MyPage(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
+        my_posts = user.post_set.all()
+        print(my_posts)
         profile_form = ProfileForm()
         profile = None
         
@@ -102,7 +104,8 @@ class MyPage(LoginRequiredMixin, View):
         context = {
             'user': user,
             'profile_form': profile_form,
-            'profile': profile
+            'profile': profile,
+            'my_posts': my_posts,
         }
         return render(request, 'user/user_mypage.html', context=context)
 
